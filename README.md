@@ -4,5 +4,9 @@ I needed a script to toggle my el gato keylight from my stream deck.
 
 Nothing fancy going on here. Just an attempt to get familiar with rust.
 
+## Usage
 
-It's not configurable yet, but that's coming. Hang in there.
+```sh
+keylight-toggle --ip <ip of keylight> # get the keylight IP from your control center app
+```
+
