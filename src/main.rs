@@ -2,6 +2,7 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use std::error::Error;
+use clap::Parser;
 
 #[derive(Debug, Deserialize)]
 struct KeyLightState {
@@ -13,15 +14,24 @@ struct KeyLightToggle {
     on: i32,
 }
 
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// IP address of the Elgato Key Light
+    #[arg(short, long)]
+    ip: String,
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn Error>> {
+    let args = Args::parse();
     let client = Client::new();
     
     // Replace with the actual URL of your Elgato Key Light API
-    let url = "http://192.168.1.105:9123/elgato/lights";
+    let url = format!("http://{}:9123/elgato/lights", args.ip);
     
     // Send a GET request to retrieve the current state
-    let response = client.get(url).send().await?;
+    let response = client.get(&url).send().await?;
     let body = response.text().await?;
     let json_body: Value = serde_json::from_str(&body)?;
     
